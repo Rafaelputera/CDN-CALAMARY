@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram CDN Stream</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen flex items-center justify-center p-6">
+
+  <div class="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
+
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold mb-2">Telegram CDN Stream</h1>
+      <p class="text-zinc-400">
+        Upload file ke Telegram dan generate link stream otomatis.
+      </p>
+    </div>
+
+    <form id="uploadForm" class="space-y-6">
+
+      <div>
+        <label class="block mb-2 text-sm text-zinc-300">
+          Pilih File
+        </label>
+
+        <input
+          type="file"
+          id="file"
+          class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white"
+          required
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-white text-black font-semibold py-4 rounded-xl hover:opacity-90 transition"
+      >
+        Upload File
+      </button>
+
+    </form>
+
+    <div id="loading" class="hidden mt-6 text-zinc-400">
+      Uploading...
+    </div>
+
+    <div id="result" class="hidden mt-6">
+      <label class="block mb-2 text-sm text-zinc-300">
+        Stream URL
+      </label>
+
+      <div class="flex gap-3">
+        <input
+          type="text"
+          id="urlResult"
+          readonly
+          class="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-green-400"
+        >
+
+        <button
+          id="copyBtn"
+          class="bg-green-500 hover:bg-green-400 text-black font-semibold px-5 rounded-xl"
+        >
+          Copy
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+const form = document.getElementById("uploadForm");
+const loading = document.getElementById("loading");
+const result = document.getElementById("result");
+const urlResult = document.getElementById("urlResult");
+const copyBtn = document.getElementById("copyBtn");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const file = document.getElementById("file").files[0];
+
+  if (!file) return;
+
+  loading.classList.remove("hidden");
+  result.classList.add("hidden");
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+
+    const req = await fetch("/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const res = await req.json();
+
+    loading.classList.add("hidden");
+
+    if (!res.success) {
+      alert(res.error || "Upload gagal");
+      return;
+    }
+
+    result.classList.remove("hidden");
+    urlResult.value = res.url;
+
+  } catch (err) {
+    loading.classList.add("hidden");
+    alert(err.message);
+  }
+});
+
+copyBtn.addEventListener("click", () => {
+  navigator.clipboard.writeText(urlResult.value);
+  copyBtn.innerText = "Copied";
+
+  setTimeout(() => {
+    copyBtn.innerText = "Copy";
+  }, 2000);
+});
+</script>
+
+</body>
+</html>
