@@ -1,4 +1,4 @@
-# 🚀 Calamary CDN Stream
+# 🚀 Calamary CDN
 
 Modern Telegram File CDN & Streaming Platform built with Express.js, MongoDB, Tailwind CSS, and Telegram Bot API.
 
@@ -71,7 +71,7 @@ project/
 ## 1. Clone Project
 
 ```bash
-git clone https://github.com/yourusername/telegram-cdn-stream.git
+git clone https://github.com/yourusername/calamary-cdn.git
 ```
 
 ---
@@ -92,9 +92,29 @@ npm install express multer axios form-data nanoid dotenv mongoose express-rate-l
 
 ---
 
-# 🔑 Environment Variables
+# ⚠️ Environment Variables Setup
 
-Create `.env` file:
+Project ini mendukung:
+
+- ✅ Localhost
+- ✅ VPS
+- ✅ Vercel
+
+Namun cara penggunaan `.env` berbeda.
+
+---
+
+# 💻 Localhost / VPS Setup
+
+Jika menjalankan project di localhost atau VPS biasa:
+
+Buat file:
+
+```txt
+.env
+```
+
+Isi:
 
 ```env
 BOT_TOKEN=YOUR_BOT_TOKEN
@@ -102,6 +122,100 @@ CHAT_ID=YOUR_CHAT_ID
 MONGODB_URI=YOUR_MONGODB_URI
 PORT=3000
 ```
+
+Kemudian jalankan:
+
+```bash
+npm run dev
+```
+
+---
+
+# 🚀 Vercel Deployment Setup
+
+Jika deploy ke Vercel:
+
+❌ Jangan mengandalkan `.env`
+
+✅ Gunakan:
+
+```txt
+Vercel Environment Variables
+```
+
+---
+
+# 📌 Cara Menambahkan Environment Variables di Vercel
+
+Buka:
+
+👉 https://vercel.com/dashboard
+
+Masuk ke:
+
+```txt
+Project
+→ Settings
+→ Environment Variables
+```
+
+Tambahkan:
+
+| Key | Value |
+|---|---|
+| BOT_TOKEN | Telegram Bot Token |
+| CHAT_ID | Telegram Chat ID |
+| MONGODB_URI | MongoDB URI |
+| PORT | 3000 |
+
+---
+
+# ⚠️ Penting
+
+Di `index.js` gunakan:
+
+```js
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+```
+
+Agar:
+
+- localhost → membaca `.env`
+- Vercel → membaca Environment Variables Vercel
+
+---
+
+# 🔒 Private Repository Method
+
+Kalau repository kamu PRIVATE:
+
+Sebenarnya aman saja jika file `.env` tetap ada di repository private.
+
+Namun tetap disarankan:
+
+```gitignore
+.env
+```
+
+agar lebih aman.
+
+---
+
+# 🌍 Public Repository Warning
+
+Jika repository PUBLIC:
+
+❌ JANGAN upload `.env`
+
+Karena semua orang bisa melihat:
+
+- BOT_TOKEN
+- MongoDB URI
+- CHAT_ID
+
+dan bot kamu bisa diambil alih.
 
 ---
 
@@ -156,7 +270,7 @@ Create free cluster:
 Get connection URI:
 
 ```env
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/telegram-cdn
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/calamary-cdn
 ```
 
 ---
@@ -188,22 +302,6 @@ Deploy:
 ```bash
 vercel
 ```
-
----
-
-# 🌍 Add Environment Variables in Vercel
-
-Go to:
-
-👉 https://vercel.com/dashboard
-
-Add:
-
-| Key | Value |
-|---|---|
-| BOT_TOKEN | Telegram Bot Token |
-| CHAT_ID | Telegram Chat ID |
-| MONGODB_URI | MongoDB URI |
 
 ---
 
@@ -339,6 +437,26 @@ Optimized for:
 
 ---
 
+# ⚡ Important Notes
+
+## Vercel Upload Speed
+
+Karena sistem bekerja seperti ini:
+
+```txt
+Browser → Vercel → Telegram
+```
+
+Maka upload file besar bisa terasa lambat.
+
+Disarankan:
+
+- Maksimal 20MB upload
+- Gunakan VPS/Railway untuk upload besar
+- Vercel cocok untuk frontend + API ringan
+
+---
+
 # 📜 License
 
 MIT License
@@ -362,6 +480,6 @@ Made with ❤️ using:
 
 **RafaelXD**
 
-Calamary CDN Stream Platform
+Calamary CDN Platform
 
 ---
